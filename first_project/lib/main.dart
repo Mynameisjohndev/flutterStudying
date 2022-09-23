@@ -40,6 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _incrementCounter() {
     setState(() {
       _number = new Random().nextInt(4);
+      print("Olá");
     });
   }
 
