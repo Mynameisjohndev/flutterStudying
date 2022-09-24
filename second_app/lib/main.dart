@@ -1,20 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 void main() {
   runApp(
     MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Frases do dia',
         home: Container(
-          color: Colors.white,
+          margin: EdgeInsets.only(top: 40),
+          decoration: BoxDecoration(
+            color: Colors.black,
+            border: Border.all(width: 3, color: Colors.white),
+          ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              TextButton(
-                onPressed: () {
-                  print('Button pressed');
-                },
-                child: Text('FlatButton To TextButton Migration'),
-              )
+              Container(
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Text("Ok2"),
+                    Text("Ok2"),
+                    Text("Ok2"),
+                    Text("Ok2"),
+                  ],
+                ),
+              ),
             ],
           ),
         )),
