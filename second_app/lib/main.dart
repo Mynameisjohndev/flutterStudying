@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +15,21 @@ class HomeStateful extends StatefulWidget {
 }
 
 class _HomeStatefulState extends State<HomeStateful> {
-  var _texto = "Jamilton Damasceno";
+  var _frases = [
+    "Sou apenas um pequeno planeta que se perde diariamente em todo o seu universo.",
+    "Novas amizades serão sempre bem-vindas para darem cor e alegria ao meu dia a dia.",
+    "Gratidão não é pagamento, mas um reconhecimento que se demonstra no dia a dia.",
+    "Nem toda mudança importante acontece de repente e faz barulho, algumas são silenciosas e vão se fazendo no dia a dia."
+  ];
+
+  var newPhrase = "Clique abaixo para gerar uma frase!";
+
+  void generatePhrase() {
+    var newP = Random().nextInt(_frases.length);
+    setState(() {
+      newPhrase = _frases[newP];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,21 +54,22 @@ class _HomeStatefulState extends State<HomeStateful> {
                   "images/logo.png",
                 ),
                 Text(
-                  "Nome: $_texto ",
+                  newPhrase,
                   textAlign: TextAlign.justify,
                   style: TextStyle(
-                      fontSize: 25,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.black,
-                      ),
+                    fontSize: 25,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.black,
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    setState(() {
-                      _texto = "Curso Flutter";
-                    });
+                    generatePhrase();
+                    // setState(() {
+                    //   newPhrase: random.;
+                    // });
                   },
-                  child: Text("Clique aqui"),
+                  child: Text("Nova frase"),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amber,
                       // foregroundColor: Colors.black,
