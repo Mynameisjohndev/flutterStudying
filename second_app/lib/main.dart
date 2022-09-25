@@ -1,84 +1,66 @@
 import 'package:flutter/material.dart';
- 
-void main(){
- 
+
+void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: HomeStateful(),
   ));
- 
 }
- 
+
 class HomeStateful extends StatefulWidget {
   @override
   _HomeStatefulState createState() => _HomeStatefulState();
 }
- 
-class _HomeStatefulState extends State<HomeStateful> {
 
+class _HomeStatefulState extends State<HomeStateful> {
   var _texto = "Jamilton Damasceno";
- 
+
   @override
   Widget build(BuildContext context) {
- 
-    print("Build chamado");
- 
     return Scaffold(
-      appBar: AppBar(
-        title: Text( "Instagram" ),
-        backgroundColor: Colors.green,
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            ElevatedButton(
-                onPressed: (){
-                  setState(() {
-                    _texto = "Curso Flutter";
-                  });
-                },
-                child: Text("Clique aqui"),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.amber
+        appBar: AppBar(
+          title: Text("Frases do dia"),
+          backgroundColor: Colors.green,
+        ),
+        body: Center(
+          child: Container(
+            padding: EdgeInsets.all(16),
+            // width: double.infinity,
+            // decoration: BoxDecoration(
+            //     border: Border.all(width: 3, color: Colors.amber),
+            //     color: Colors.white
+            // ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Image.asset(
+                  "images/logo.png",
                 ),
+                Text(
+                  "Nome: $_texto ",
+                  textAlign: TextAlign.justify,
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontStyle: FontStyle.italic,
+                      color: Colors.black,
+                      ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _texto = "Curso Flutter";
+                    });
+                  },
+                  child: Text("Clique aqui"),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.amber,
+                      // foregroundColor: Colors.black,
+                      disabledForegroundColor: Colors.transparent),
+                ),
+              ],
             ),
-            Text("Nome: $_texto ")
-          ],
-        ),
-      ),
- 
-    );
-  }
-}
- 
- 
-class Home extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
- 
-    var _titulo = "Instagram";
- 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text( _titulo ),
-        backgroundColor: Colors.green,
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Text("Conteúdo principal"),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.lightGreen,
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Row(
-            children: <Widget>[
-              Text("Texto 1"),
-              Text("Texto 1"),
-            ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
