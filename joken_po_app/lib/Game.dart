@@ -8,6 +8,9 @@ class MyGame extends StatefulWidget {
 }
 
 class _MyGameState extends State<MyGame> {
+  var playerOption = "";
+  var smartphoneOption = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,8 +28,9 @@ class _MyGameState extends State<MyGame> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
-          Image.asset(
-            "images/padrao.png",
+          GestureDetector(
+            child: Image.asset("images/padrao.png"),
+            onTap: () {},
           ),
           const Padding(
             padding: EdgeInsets.only(top: 32, bottom: 16),
@@ -40,22 +44,34 @@ class _MyGameState extends State<MyGame> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.asset(
-                "images/pedra.png",
-                height: 100,
+              GestureDetector(
+                child: Image.asset("images/pedra.png", height: 100),
+                onTap: () {},
               ),
-              Image.asset(
-                "images/papel.png",
-                height: 100,
+              GestureDetector(
+                child: Image.asset("images/papel.png", height: 100),
+                onTap: () {},
               ),
-              Image.asset(
-                "images/tesoura.png",
-                height: 100,
+              GestureDetector(
+                child: Image.asset("images/tesoura.png", height: 100),
+                onTap: () {},
               ),
             ],
-          )
-        ],
+          ),
+          MyWidget("Texto pra")
+        ]
       ),
     );
+  }
+}
+
+class MyWidget extends StatelessWidget {
+  const MyWidget(@required this.texto);
+
+  final String texto;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(texto);
   }
 }
