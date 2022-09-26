@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:third_app/InputText.dart';
+import 'package:third_app/home.dart';
+
 void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyTextInput(),
+      home: Home(),
     )
   );
 }
