@@ -1,4 +1,7 @@
-import 'package:atm_app/secondScreen.dart';
+import 'package:atm_app/client_screen.dart';
+import 'package:atm_app/company_screen.dart';
+import 'package:atm_app/contact_screen.dart';
+import 'package:atm_app/service_screen.dart';
 import 'package:flutter/material.dart';
 
 class FirstScreen extends StatefulWidget {
@@ -6,16 +9,49 @@ class FirstScreen extends StatefulWidget {
   State<FirstScreen> createState() => _FirstScreenState();
 }
 
-void _openCompany() {}
 
 class _FirstScreenState extends State<FirstScreen> {
+
+  void _openCompany() {
+    Navigator.push(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => CompanyScreen(),
+      )
+    );
+  }
+  void _openClient() {
+    Navigator.push(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => ClientScreen(),
+      )
+    );
+  }
+  void _openService() {
+    Navigator.push(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => ServiceScreen(),
+      )
+    );
+  }
+  void _openContact() {
+    Navigator.push(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => ContactScreen(),
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Atm consultoria"),
-        backgroundColor: Color.fromRGBO(76, 175, 80, 1),
+        backgroundColor: Colors.green,
       ),
       body: Container(
         padding: EdgeInsets.all(32),
@@ -30,11 +66,11 @@ class _FirstScreenState extends State<FirstScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () {},
+                    onTap: _openCompany,
                     child: Image.asset("images/menu_empresa.png"),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: _openService,
                     child: Image.asset("images/menu_servico.png"),
                   )
                 ],
@@ -46,11 +82,11 @@ class _FirstScreenState extends State<FirstScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () {},
+                    onTap: _openClient,
                     child: Image.asset("images/menu_cliente.png"),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: _openContact,
                     child: Image.asset("images/menu_contato.png"),
                   )
                 ],
