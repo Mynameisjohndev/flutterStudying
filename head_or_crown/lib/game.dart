@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:head_or_crown/resultGame.dart';
 
 class Game extends StatefulWidget {
   const Game({super.key});
@@ -8,7 +11,17 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  void _showResult() {}
+
+
+  void _showResult() {
+    var options = ["cara", "coroa"];
+    var random = Random().nextInt(options.length);
+    var result = options[random];
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Result(value: result))
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
