@@ -4,13 +4,13 @@ import 'package:atm_app/contact_screen.dart';
 import 'package:atm_app/service_screen.dart';
 import 'package:flutter/material.dart';
 
-class FirstScreen extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  State<FirstScreen> createState() => _FirstScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 
-class _FirstScreenState extends State<FirstScreen> {
+class _HomeScreenState extends State<HomeScreen> {
 
   void _openCompany() {
     Navigator.push(
