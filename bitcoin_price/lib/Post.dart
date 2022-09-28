@@ -1,7 +1,7 @@
 class Post{
 
   int _userId;
-  int _id;
+  int? _id;
   String _title;
   String _body;
 
@@ -28,9 +28,9 @@ class Post{
     _title = value;
   }
 
-  int get id => _id;
+  int? get id => _id;
 
-  set id(int value) {
+  set id(int? value) {
     _id = value;
   }
 

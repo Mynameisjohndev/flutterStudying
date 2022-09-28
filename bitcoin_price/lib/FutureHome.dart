@@ -27,7 +27,7 @@ class _FutureHomeState extends State<FutureHome> {
 
   _post() async{
 
-    Post post = new Post(120, 1, "Titulo", "Corpo da postagem");
+    Post post = Post(120, null, "Titulo", "Corpo da postagem");
 
     var corpo = json.encode(
         post.toJson()
@@ -46,6 +46,57 @@ class _FutureHomeState extends State<FutureHome> {
 
   }
 
+  _put() async{
+    Post post = new Post(120, 101, "Titul2o", "Corpo da postagem");
+
+    var corpo = json.encode(
+        post.toJson()
+    );
+    
+    Api.Response response = await Api.put(
+      Uri.parse(_urlBase + "/posts/2"),
+      body: corpo,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }, 
+    );
+
+    print(response.statusCode);
+    print(response.body);
+  }
+
+  _patch() async {
+    Post post = new Post(120, 101, "sdasda", "Corpo dasda postagem");
+
+    var corpo = json.encode(
+        post.toJson()
+    );
+    
+    Api.Response response = await Api.patch(
+      Uri.parse(_urlBase + "/posts/2"),
+      body: corpo,
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }, 
+    );
+
+    print(response.statusCode);
+    print(response.body);
+  }
+
+  _delete() async {
+
+    Api.Response response = await Api.delete(
+      Uri.parse(_urlBase + "/posts/2"),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }, 
+    );
+
+    print(response.statusCode);
+    print(response.body);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,9 +110,10 @@ class _FutureHomeState extends State<FutureHome> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                ElevatedButton(onPressed: _post, child: Text("Salvar")),
-                ElevatedButton(onPressed: null, child: Text("Atualizar")),
-                ElevatedButton(onPressed: null, child: Text("Deletar")),
+                ElevatedButton(onPressed: _post, child: Text("Post")),
+                ElevatedButton(onPressed: _put, child: Text("Put")),
+                ElevatedButton(onPressed: _patch, child: Text("Patch")),
+                ElevatedButton(onPressed: _patch, child: Text("Delete")),
               ]),
               Expanded(
                 child: FutureBuilder<List<Post>>(
@@ -84,7 +136,7 @@ class _FutureHomeState extends State<FutureHome> {
                                 List<Post>? lista = snapshot.data;
                                 Post post = lista![index];
                                 return ListTile(
-                                  title: Text(post.title),
+                                  title: Text(1>2 ? post.title : post.title + "oi"),
                                   subtitle: Text(post.id.toString()),
                                 );
                               });
