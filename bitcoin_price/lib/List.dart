@@ -36,6 +36,41 @@ class _MyListState extends State<MyList> {
           itemCount: _itens.length,
           itemBuilder: (context, index) {
             return ListTile(
+              onTap: (){
+                print("teste ${index}");
+                showDialog(
+                  context: context, 
+                  builder: (context){
+                    return AlertDialog(
+                      title: Text("Item clicado"),
+                      titlePadding: EdgeInsets.all(20),
+                      titleTextStyle: TextStyle(
+                        fontSize: 20,
+                        color: Colors.orange
+                      ),
+                      content: Text("Conteudo"),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: (){
+                            print("sim");
+                          },
+                          child: Text("Sim"),
+                        ),
+                        TextButton(
+                          onPressed: (){
+                            print("não");
+                            Navigator.pop(context);
+                          },
+                          child: Text("Não"),
+                        ),
+                      ],
+                    );
+                  }
+                );
+              },
+              onLongPress: (){
+                print("teste longo");
+              },
               title: Text(_itens[index]["title"]),
               subtitle: Text(_itens[index]["description"]),
             );
