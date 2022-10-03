@@ -51,13 +51,43 @@ class _TodoListState extends State<TodoList> {
   @override
   void initState() {
     super.initState();
-
     _loadTodos().then( (dados){
       setState(() {
         _todoList = json.decode(dados);
       });
     } );
+  }
 
+  Widget createList(context, index){
+    final item = _todoList[index]["title"];
+    return Dismissible(
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction){
+        _todoList.removeAt(index);
+        _saveData();
+      },
+      background: Container(
+        padding: EdgeInsets.all(16),
+        color: Colors.red,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Icon(Icons.delete, color: Colors.white)
+          ]
+        ),
+      ),
+      key: Key(item),
+      child:  CheckboxListTile(
+      title: Text(_todoList[index]["title"]), 
+      onChanged: (bool? value) { 
+        setState(() {
+        _todoList[index]["realizada"] = value;
+          _saveData();
+        });
+      }, 
+      value: _todoList[index]["realizada"],
+      ),
+    );
   }
 
   @override
@@ -72,18 +102,7 @@ class _TodoListState extends State<TodoList> {
           children: <Widget>[
             Expanded(
               child: ListView.builder(
-                itemBuilder: (context, index){
-                  return CheckboxListTile(
-                    title: Text(_todoList[index]["title"]), 
-                    onChanged: (bool? value) { 
-                      setState(() {
-                        _todoList[index]["realizada"] = value;
-                        _saveData();
-                      });
-                    }, 
-                    value: _todoList[index]["realizada"],
-                  );
-                },
+                itemBuilder: createList,
                 itemCount: _todoList.length,
               )
             )

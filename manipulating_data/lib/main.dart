@@ -6,7 +6,7 @@ import 'package:manipulating_data/TodoList.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: DismissibleUsage(),
+    home: TodoList(),
     debugShowCheckedModeBanner: false,
   ));
 }
