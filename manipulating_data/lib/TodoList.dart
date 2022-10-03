@@ -12,20 +12,45 @@ class TodoList extends StatefulWidget {
 
 class _TodoListState extends State<TodoList> { 
 
-  List _todoList = ["ir ao mercado", "programar em futter", "treino"];
+  List _todoList = [
+    // {"title": "TESTE"}
+  ];
   
-  _saveTodo()async{
-
+  _getFile() async{
     final source = await getApplicationDocumentsDirectory();
-    var file = File("${source}/data.json");
+    return File("${source.path}/data.json");
+  }
 
+  _saveTodo()async{
+    var file = await _getFile();
     Map<String, dynamic> todo = Map();
     todo["title"] = "Ir ao mercado";
     todo["realizada"] = false;
     _todoList.add(todo);
     
     String data = json.encode(_todoList);
-    file.writeAsStringSync(data);
+    file.writeAsString(data);
+  }
+
+  _loadTodos()async{
+    try{
+      final file = await _getFile();
+      return file.readAsString();
+    }catch(error){
+      return null;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loadTodos().then( (dados){
+      setState(() {
+        _todoList = json.decode(dados);
+      });
+    } );
+
   }
 
   @override
@@ -42,7 +67,7 @@ class _TodoListState extends State<TodoList> {
               child: ListView.builder(
                 itemBuilder: (context, index){
                   return ListTile(
-                    title: Text(_todoList[index]),
+                    title: Text(_todoList[index]["title"]),
                   );
                 },
                 itemCount: _todoList.length,
@@ -63,7 +88,8 @@ class _TodoListState extends State<TodoList> {
                 title: Text("Adicionar tarefa"),
                 content: TextField(
                   decoration: InputDecoration(
-                    labelText: "Digite sua tarefas"
+                    labelText: "Digite sua tarefas",
+                    
                   ),
                   onChanged: (value){
 
@@ -81,8 +107,8 @@ class _TodoListState extends State<TodoList> {
                   ),
                   ElevatedButton(
                     onPressed: (){
-                      _saveTodo;
-                      Navigator.pop(context);
+                      _saveTodo();
+                      // Navigator.pop(context);
                     }, 
                     child: Text("Salvar"),
                     style: ElevatedButton.styleFrom(
