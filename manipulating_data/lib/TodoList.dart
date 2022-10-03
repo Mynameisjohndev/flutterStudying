@@ -14,6 +14,8 @@ class _TodoListState extends State<TodoList> {
 
   List _todoList = [];
   TextEditingController _editingController = TextEditingController();
+  Map<String, dynamic> lestDelete = Map();
+
 
   _getFile() async{
     final source = await getApplicationDocumentsDirectory();
@@ -61,10 +63,30 @@ class _TodoListState extends State<TodoList> {
   Widget createList(context, index){
     final item = _todoList[index]["title"];
     return Dismissible(
+      key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
       direction: DismissDirection.endToStart,
       onDismissed: (direction){
+
+        lestDelete = _todoList[index];
         _todoList.removeAt(index);
         _saveData();
+
+        final snackbar = SnackBar(
+          // backgroundColor: Colors.grey,
+          content: Text("Tarefa removida!"),
+          duration: Duration(seconds: 5),
+          action: SnackBarAction(
+            label: "Desfazer",
+            onPressed: (){
+              setState(() {
+                _todoList.insert(index, lestDelete);
+                _saveData();
+              });
+            }
+          ),
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackbar);
       },
       background: Container(
         padding: EdgeInsets.all(16),
@@ -76,7 +98,6 @@ class _TodoListState extends State<TodoList> {
           ]
         ),
       ),
-      key: Key(item),
       child:  CheckboxListTile(
       title: Text(_todoList[index]["title"]), 
       onChanged: (bool? value) { 
