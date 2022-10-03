@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
 class TodoList extends StatefulWidget {
   const TodoList({super.key});
 
@@ -10,7 +12,21 @@ class TodoList extends StatefulWidget {
 
 class _TodoListState extends State<TodoList> { 
 
-  List todoList = ["ir ao mercado", "programar em futter", "treino"];
+  List _todoList = ["ir ao mercado", "programar em futter", "treino"];
+  
+  _saveTodo()async{
+
+    final source = await getApplicationDocumentsDirectory();
+    var file = File("${source}/data.json");
+
+    Map<String, dynamic> todo = Map();
+    todo["title"] = "Ir ao mercado";
+    todo["realizada"] = false;
+    _todoList.add(todo);
+    
+    String data = json.encode(_todoList);
+    file.writeAsStringSync(data);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +42,10 @@ class _TodoListState extends State<TodoList> {
               child: ListView.builder(
                 itemBuilder: (context, index){
                   return ListTile(
-                    title: Text(todoList[index]),
+                    title: Text(_todoList[index]),
                   );
                 },
-                itemCount: todoList.length,
+                itemCount: _todoList.length,
               )
             )
           ]
@@ -65,6 +81,7 @@ class _TodoListState extends State<TodoList> {
                   ),
                   ElevatedButton(
                     onPressed: (){
+                      _saveTodo;
                       Navigator.pop(context);
                     }, 
                     child: Text("Salvar"),
