@@ -12,22 +12,29 @@ class TodoList extends StatefulWidget {
 
 class _TodoListState extends State<TodoList> { 
 
-  List _todoList = [
-    // {"title": "TESTE"}
-  ];
-  
+  List _todoList = [];
+  TextEditingController _editingController = TextEditingController();
+
   _getFile() async{
     final source = await getApplicationDocumentsDirectory();
     return File("${source.path}/data.json");
   }
 
-  _saveTodo()async{
-    var file = await _getFile();
+  _saveTodo(){
+    String text = _editingController.text;
+    print(text);
     Map<String, dynamic> todo = Map();
-    todo["title"] = "Ir ao mercado";
+    todo["title"] = text;
     todo["realizada"] = false;
-    _todoList.add(todo);
-    
+    setState(() {
+      _todoList.add(todo);
+    });
+    _saveData();
+    _editingController.text = "";
+  }
+
+  _saveData()async{
+    var file = await _getFile();
     String data = json.encode(_todoList);
     file.writeAsString(data);
   }
@@ -66,8 +73,15 @@ class _TodoListState extends State<TodoList> {
             Expanded(
               child: ListView.builder(
                 itemBuilder: (context, index){
-                  return ListTile(
-                    title: Text(_todoList[index]["title"]),
+                  return CheckboxListTile(
+                    title: Text(_todoList[index]["title"]), 
+                    onChanged: (bool? value) { 
+                      setState(() {
+                        _todoList[index]["realizada"] = value;
+                        _saveData();
+                      });
+                    }, 
+                    value: _todoList[index]["realizada"],
                   );
                 },
                 itemCount: _todoList.length,
@@ -87,12 +101,11 @@ class _TodoListState extends State<TodoList> {
               return AlertDialog(
                 title: Text("Adicionar tarefa"),
                 content: TextField(
+                  controller: _editingController,
                   decoration: InputDecoration(
                     labelText: "Digite sua tarefas",
-                    
                   ),
                   onChanged: (value){
-
                   },
                 ),
                 actions: [
@@ -108,7 +121,7 @@ class _TodoListState extends State<TodoList> {
                   ElevatedButton(
                     onPressed: (){
                       _saveTodo();
-                      // Navigator.pop(context);
+                      Navigator.pop(context);
                     }, 
                     child: Text("Salvar"),
                     style: ElevatedButton.styleFrom(
