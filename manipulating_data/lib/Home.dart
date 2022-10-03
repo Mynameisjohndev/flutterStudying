@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -11,12 +12,27 @@ class _HomeState extends State<Home> {
 
   TextEditingController _selectController = TextEditingController();
 
-  _save(){
+  String _saveText = "Nada salvo";
 
+  _save() async{
+    String value = _selectController.text;
+  
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("@value_", value);
+    print(_selectController.text);
   }
 
-  _load(){
+  _load() async{
+    final prefs = await SharedPreferences.getInstance();
+    print(prefs.getString("@value_")!);
+    setState((){
+      _saveText = prefs.getString("@value_")! ?? "Sem valor!";
+    });
+  }
 
+  _remove() async{
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove("@value_");
   }
 
   @override
@@ -30,7 +46,7 @@ class _HomeState extends State<Home> {
         child: Column(
           children: <Widget>[
             Text(
-              "Nada salvo",
+              _saveText,
               style: TextStyle(
                 fontSize: 20
               ),
@@ -42,28 +58,31 @@ class _HomeState extends State<Home> {
               ),
               controller: _selectController,
             ),
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(15),
-                  child: ElevatedButton(
+            Padding(
+              padding: EdgeInsets.all(15),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child:  Row(
+                children: <Widget>[
+                  ElevatedButton(
                     onPressed: _save, 
                     child: Text("Salvar"),
-                    // style: ElevatedButton.styleFrom(
-                    //   backgroundColor: Colors.amber
-                    // ),
+                    style: ElevatedButton.styleFrom(
+                      
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(15),
-                  child: ElevatedButton(
+                  ElevatedButton(
                     onPressed: _load, 
                     child: Text("Recuperar"),
                   ),
-                ),
-                
-              ],
-            )
+                  ElevatedButton(
+                    onPressed: _remove, 
+                    child: Text("Remover"),
+                  ),
+                ],
+              ) ,
+              )   
+            ),
           ],
         ),
       ),
