@@ -41,7 +41,6 @@ class AnotationHelper{
       version: 1,
       onCreate: _onCreateDataBase
     );
-    print(db.isOpen);
     return db;
   }
 
@@ -56,5 +55,12 @@ class AnotationHelper{
     int result = await dataBase.insert(tableName,anotation.toMap());
     return result;
   }
+
+  loadAnotation()async{
+    var dataBase = await db;
+    String sql = "SELECT * FROM  $tableName ORDER BY data";
+    List anotations = await dataBase.rawQuery(sql);
+    return anotations;
+  } 
 
 }

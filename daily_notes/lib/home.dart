@@ -11,14 +11,30 @@ class _HomeState extends State<Home> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   var _db = AnotationHelper();
+  List<Anotation> _anotations = <Anotation>[];
 
-  _saveAnotation()async{
+  _saveAnotation() async {
     String title = _titleController.text;
-    String description= _descriptionController.text;
+    String description = _descriptionController.text;
     String data = DateTime.now().toString();
     Anotation anotation = Anotation(title, description, data);
     int result = await _db.saveAnotation(anotation);
-    print(result.toString());
+    _titleController.clear();
+    _descriptionController.clear();
+    _loadAnotation();
+  }
+
+  _loadAnotation() async {
+    List anotations = await _db.loadAnotation();
+    List<Anotation>? tempList = <Anotation>[];
+    for (var item in anotations) {
+      Anotation anotation = Anotation.fromMap(item);
+      tempList.add(anotation);
+    }
+    setState(() {
+      _anotations = tempList!;
+    });
+    tempList = null;
   }
 
   _exibirTelaCadastro() {
@@ -59,13 +75,43 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadAnotation();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Minhas anotações"),
         backgroundColor: Colors.lightGreen,
       ),
-      body: Container(),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: _anotations.length,
+              itemBuilder: (context, index){
+
+                final item = _anotations[index];
+    
+                return Card(
+                  margin: EdgeInsets.only(top: 16, right: 26, left: 26),
+                  elevation: 2,
+                  child: ListTile(
+                    style: ListTileStyle.drawer,
+                    contentPadding: EdgeInsets.all(10),
+                    title: Text(item.title!),
+                    subtitle: Text("${item.data} - ${item.description!}"),
+                  ),
+                );
+              } ,
+            ),
+          )
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.green,
           foregroundColor: Colors.white,
