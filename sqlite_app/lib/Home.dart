@@ -43,9 +43,16 @@ class _HomeState extends State<Home> {
     print(id);
   }
 
+  _listUsers()async{
+    Database bd = await _receiveData();
+    String sql = "SELECT * FROM usuarios";
+    List response = await bd.rawQuery(sql);
+    print(response);
+  }
+
   @override
   Widget build(BuildContext context) {
-    _save();
+    _listUsers();
     return Scaffold(
       appBar: AppBar(
         title: Text("Sqlite"),
