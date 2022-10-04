@@ -1,3 +1,5 @@
+import 'package:daily_notes/helper/AnotationHelper.dart';
+import 'package:daily_notes/helper/model/Anotation.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -8,6 +10,16 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
+  var _db = AnotationHelper();
+
+  _saveAnotation()async{
+    String title = _titleController.text;
+    String description= _descriptionController.text;
+    String data = DateTime.now().toString();
+    Anotation anotation = Anotation(title, description, data);
+    int result = await _db.saveAnotation(anotation);
+    print(result.toString());
+  }
 
   _exibirTelaCadastro() {
     showDialog(
@@ -37,6 +49,7 @@ class _HomeState extends State<Home> {
                   child: Text("Cancelar")),
               TextButton(
                   onPressed: () {
+                    _saveAnotation();
                     Navigator.pop(context);
                   },
                   child: Text("Salvar"))

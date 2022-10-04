@@ -1,8 +1,10 @@
+import 'package:daily_notes/helper/model/Anotation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class AnotationHelper{
 
+  static final String tableName = "anotacao";
   static final AnotationHelper _anotationHelper = AnotationHelper._internal();
   Database? _db;
 
@@ -23,7 +25,11 @@ class AnotationHelper{
   }
 
   _onCreateDataBase(Database db, int version)async{
-    String sql = "CREATE TABLE anotacao (id INTEGER PRIMARY KEY AUTOINCREMENT, titulo VARCHAR, description TEXT, data DATETIME)";
+    String sql = "CREATE TABLE $tableName" 
+    "(id INTEGER PRIMARY KEY AUTOINCREMENT," 
+    "title VARCHAR," 
+    "description TEXT," 
+    "data DATETIME)";
     await db.execute(sql);
   }
 
@@ -35,7 +41,20 @@ class AnotationHelper{
       version: 1,
       onCreate: _onCreateDataBase
     );
+    print(db.isOpen);
     return db;
+  }
+
+  Future<int> saveAnotation(Anotation anotation) async{
+    // print({
+    //   anotation.id,
+    //   anotation.data,
+    //   anotation.title,
+    //   anotation.description,
+    // });
+    var dataBase = await db;
+    int result = await dataBase.insert(tableName,anotation.toMap());
+    return result;
   }
 
 }
