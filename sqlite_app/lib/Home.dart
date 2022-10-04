@@ -11,12 +11,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
  
- _recuperarBancoDados() async {
+ _receiveData() async {
 
     final dataBase = await getDatabasesPath();
     final localDataBase = join(dataBase, "banco.db");
 
-    var retorno = await openDatabase(
+    var bd = await openDatabase(
       localDataBase,
       version: 1,
       onCreate: (db, version){
@@ -25,13 +25,27 @@ class _HomeState extends State<Home> {
       }
     );
 
-    print("aberto: " + retorno.isOpen.toString() );
+    // print("aberto: " + bd.isOpen.toString() );
+    return bd;
+  }
 
+  _save()async{
+    Database bd = await _receiveData();
+    Map<String, dynamic> dataUser = {
+      "nome": "João",
+      "idade": 23
+    };
+    print(dataUser);
+    int id = await bd.insert(
+      "usuarios", 
+      dataUser
+    );
+    print(id);
   }
 
   @override
   Widget build(BuildContext context) {
-    _recuperarBancoDados();
+    _save();
     return Scaffold(
       appBar: AppBar(
         title: Text("Sqlite"),

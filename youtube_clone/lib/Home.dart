@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:youtube_clone/Screens/first_screen.dart';
+import 'package:youtube_clone/Screens/fourth_screen.dart';
+import 'package:youtube_clone/Screens/second_screen.dart';
+import 'package:youtube_clone/Screens/third_screen.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -6,6 +10,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  int indexNow = 0;
+
+  List<Widget> screens = [
+    FirstScreen(),
+    SecondScreen(),
+    ThirdScreen(),
+    FourthScreen()
+  ];
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,12 +49,34 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-
-          ],
-        ),
+      body: screens[indexNow],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: indexNow,
+        onTap: (index){
+          setState(() { 
+            indexNow = index;
+          });
+        },
+        fixedColor: Colors.red,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Início",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.whatshot_outlined),
+            label: "Em alta"
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.subscriptions),
+            label: "Inscrições"
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.folder),
+            label: "Biblioteca"
+          ),
+        ],
       ),
     );
   }
