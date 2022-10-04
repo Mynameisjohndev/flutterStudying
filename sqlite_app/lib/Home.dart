@@ -99,12 +99,62 @@ class _HomeState extends State<Home> {
     );
   }
 
+  _listUserByIdAndConditions(int id, String nome) async {
+    Database bd = await _receiveData();
+    //CRUD -> Create, Read, Update and Delete
+    List usuarios = await bd.query(
+      "usuarios",
+      columns: ["id", "nome", "idade"],
+      where: "id = ? AND nome = ?",
+      whereArgs: [id, nome]
+    );
+
+    for( var usuario in usuarios ){
+      print(
+          "item id: " + usuario['id'].toString() +
+          " nome: " + usuario['nome'] +
+          " idade: " + usuario['idade'].toString()
+      );
+    }
+  }
+
+  _updateUserById(int id) async {
+    Database bd = await _receiveData();
+    Map<String, dynamic> dataUser = {
+      "nome": "João", 
+      "idade": 53
+    };
+    bd.update(
+      "usuarios",
+      dataUser,
+      where: "id = ?",
+      whereArgs: [id]
+    );
+    String sql = "SELECT * FROM usuarios";
+    List usuarios = await bd.rawQuery(sql);
+    print(usuarios);
+  }
+
+  _deleteUsersByConditions(int idade, String nome) async {
+    Database bd = await _receiveData();
+    bd.delete(
+      "usuarios",
+      where: "nome = ? AND idade  = ?",
+      whereArgs: [nome, idade]
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // _save();
+    // _save();
+    // _save();
     // _listUserById(1);
-    // _listUsers();
-    _deleteUserById(1);
+    _listUsers();
+    // _deleteUserById(1);
+    // _listUserByIdAndConditions(2, "Jamile");
+    // _updateUserById(2);
+    // _deleteUsersByConditions(13, "Ana");
     return Scaffold(
       appBar: AppBar(
         title: Text("Sqlite"),
