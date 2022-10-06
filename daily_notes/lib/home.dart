@@ -10,17 +10,26 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   var _db = AnotationHelper();
   List<Anotation> _anotations = <Anotation>[];
 
-  _saveAnotation() async {
+  _saveAndUpdateAnotation({Anotation? selectedAnotation}) async {
     String title = _titleController.text;
     String description = _descriptionController.text;
     String data = DateTime.now().toString();
-    Anotation anotation = Anotation(title, description, data);
-    int result = await _db.saveAnotation(anotation);
+    if(selectedAnotation == null){
+      Anotation anotation = Anotation(title, description, data);
+      int result = await _db.saveAnotation(anotation);
+    }else{
+      selectedAnotation.title = title;
+      selectedAnotation.description = description;
+      selectedAnotation.data = data;
+      int result = await _db.updateAnotation(selectedAnotation);
+    }
+
     _titleController.clear();
     _descriptionController.clear();
     _loadAnotation();
@@ -47,12 +56,24 @@ class _HomeState extends State<Home> {
     return formatedDate;
   }
 
-  _exibirTelaCadastro() {
+  _showCreateNewAnotation({Anotation? anotation}) {
+
+    String title = "";
+    if(anotation == null){
+      _titleController.text = "";
+      _descriptionController.text = "";
+      title = "Salvar";
+    }else{
+      _titleController.text = anotation.title!;
+      _descriptionController.text = anotation.description!;
+      title = "Atualizar";
+    }
+
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Adicionar anotação"),
+            title: Text("$title anotação"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -75,10 +96,10 @@ class _HomeState extends State<Home> {
                   child: Text("Cancelar")),
               TextButton(
                   onPressed: () {
-                    _saveAnotation();
+                    _saveAndUpdateAnotation(selectedAnotation: anotation);
                     Navigator.pop(context);
                   },
-                  child: Text("Salvar"))
+                  child: Text(title))
             ],
           );
         });
@@ -115,6 +136,23 @@ class _HomeState extends State<Home> {
                     contentPadding: EdgeInsets.all(10),
                     title: Text(item.title!),
                     subtitle: Text("${_formatDate(item.data)} - ${item.description!}"),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          onPressed: (){
+                            _showCreateNewAnotation(anotation: item);
+                          },
+                          icon: Icon(Icons.edit, color: Colors.green)
+                        ),
+                        IconButton(
+                          onPressed: (){
+                            print("oi");
+                          },
+                          icon: Icon(Icons.delete, color: Colors.red)
+                        ),
+                      ],
+                    ),
                   ),
                 );
               } ,
@@ -127,7 +165,7 @@ class _HomeState extends State<Home> {
           foregroundColor: Colors.white,
           child: Icon(Icons.add),
           onPressed: () {
-            _exibirTelaCadastro();
+            _showCreateNewAnotation();
           }),
     );
   }

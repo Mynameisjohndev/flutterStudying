@@ -56,9 +56,20 @@ class AnotationHelper{
     return result;
   }
 
+  Future<int> updateAnotation(Anotation anotation) async{
+    var dataBase = await db;
+    int result = await dataBase.update(
+      tableName,
+      anotation.toMap(),
+      where: "id = ?",
+      whereArgs: [anotation.id]
+    );
+    return result;
+  }
+
   loadAnotation()async{
     var dataBase = await db;
-    String sql = "SELECT * FROM  $tableName ORDER BY data";
+    String sql = "SELECT * FROM  $tableName ORDER BY data DESC";
     List anotations = await dataBase.rawQuery(sql);
     return anotations;
   } 
