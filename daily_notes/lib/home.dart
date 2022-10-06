@@ -1,6 +1,8 @@
 import 'package:daily_notes/helper/AnotationHelper.dart';
 import 'package:daily_notes/helper/model/Anotation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -35,6 +37,14 @@ class _HomeState extends State<Home> {
       _anotations = tempList!;
     });
     tempList = null;
+  }
+
+  _formatDate(String? data){
+    initializeDateFormatting('pt_BR');
+    var formater = DateFormat("d/M/y 'ás' H:m:s");
+    DateTime convertedDate = DateTime.parse(data!);
+    String formatedDate = formater.format(convertedDate);
+    return formatedDate;
   }
 
   _exibirTelaCadastro() {
@@ -104,7 +114,7 @@ class _HomeState extends State<Home> {
                     style: ListTileStyle.drawer,
                     contentPadding: EdgeInsets.all(10),
                     title: Text(item.title!),
-                    subtitle: Text("${item.data} - ${item.description!}"),
+                    subtitle: Text("${_formatDate(item.data)} - ${item.description!}"),
                   ),
                 );
               } ,
