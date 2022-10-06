@@ -10,7 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  
+
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   var _db = AnotationHelper();
@@ -46,6 +46,11 @@ class _HomeState extends State<Home> {
       _anotations = tempList!;
     });
     tempList = null;
+  }
+
+  _removeAnotation(int? id) async{
+    await _db.removeAnotation(id);
+     _loadAnotation();
   }
 
   _formatDate(String? data){
@@ -105,6 +110,7 @@ class _HomeState extends State<Home> {
         });
   }
 
+
   @override
   void initState() {
     // TODO: implement initState
@@ -147,7 +153,7 @@ class _HomeState extends State<Home> {
                         ),
                         IconButton(
                           onPressed: (){
-                            print("oi");
+                            _removeAnotation(item.id);
                           },
                           icon: Icon(Icons.delete, color: Colors.red)
                         ),

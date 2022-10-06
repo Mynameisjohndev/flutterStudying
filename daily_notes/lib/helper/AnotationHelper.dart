@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:daily_notes/helper/model/Anotation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -73,5 +75,14 @@ class AnotationHelper{
     List anotations = await dataBase.rawQuery(sql);
     return anotations;
   } 
+
+  Future<int> removeAnotation(int? id) async{
+    var dataBase = await db;
+    return dataBase.delete(
+      tableName,
+      where: "id = ?",
+      whereArgs: [id]
+    );
+  }
 
 }
