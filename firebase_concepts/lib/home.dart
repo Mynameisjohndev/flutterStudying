@@ -45,6 +45,17 @@ FirebaseFirestore db = FirebaseFirestore.instance;
       }
     });
   }
+  void filter() async{
+    QuerySnapshot response = await db.collection('counter')
+    .where("datetime",isEqualTo: "0")
+    .where("date",isEqualTo: "12")
+    .get();
+
+    for(DocumentSnapshot item in response.docs){
+        var dataItem = item.data();
+        print(dataItem);
+      }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +85,10 @@ FirebaseFirestore db = FirebaseFirestore.instance;
             ElevatedButton(
               child: Text("Tempo real"),
               onPressed: realtime,
+            ),
+            ElevatedButton(
+              child: Text("Filtrar"),
+              onPressed: filter,
             ),
           ],
         ),
