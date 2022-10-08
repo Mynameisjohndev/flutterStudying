@@ -47,8 +47,10 @@ FirebaseFirestore db = FirebaseFirestore.instance;
   }
   void filter() async{
     QuerySnapshot response = await db.collection('counter')
-    .where("datetime",isEqualTo: "0")
-    .where("date",isEqualTo: "12")
+    // .where("datetime",isEqualTo: "0")
+    // .where("date",isEqualTo: "12")
+    .where("date", isGreaterThanOrEqualTo: "m")
+    .where("date", isLessThanOrEqualTo: "m" + "\uf8ff")
     .get();
 
     for(DocumentSnapshot item in response.docs){
