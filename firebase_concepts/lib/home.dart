@@ -1,5 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+// import 'package:flutter/foundation.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -59,6 +65,61 @@ FirebaseFirestore db = FirebaseFirestore.instance;
       }
   }
 
+  void createUser(){
+    FirebaseAuth auth = FirebaseAuth.instance;
+    auth.createUserWithEmailAndPassword(
+      email: "joao@email.com", 
+      password: "password"
+    ).then((value) => {
+      print(value),
+    });
+  }
+
+  void login(){
+    print('value');
+    FirebaseAuth auth = FirebaseAuth.instance;
+    auth.signInWithEmailAndPassword(
+      email: "joao@email.com", 
+      password: "password"
+    ).then((value) => {
+      print(value),
+    });
+  }
+
+  int numbers = 0;
+
+  void updatev(){
+    setState(() {
+      numbers++;
+    });
+  }
+
+  File? imageFile;
+
+  Future pickImageCamera() async {
+      var image =  await ImagePicker().pickImage(source: ImageSource.camera);
+      if(image == null) return;
+      setState(() {
+        imageFile = File(image.path);
+      });
+  }
+  Future pickImageGalery() async {
+      var image =  await ImagePicker().pickImage(source: ImageSource.gallery);
+      if(image == null) return;
+      setState(() {
+        imageFile = File(image.path);
+      });
+  }
+
+  Future uploadStorageFirebase() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    final pack = storage.ref();
+    final archive = pack
+    .child("fotos")
+    .child("foto1.jpg");
+    archive.putFile(imageFile!);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,32 +129,79 @@ FirebaseFirestore db = FirebaseFirestore.instance;
       body: Container(
         child: Column(
           children: [
+            // ElevatedButton(
+            //   child: Text("Click"),
+            //   onPressed: create,
+            // ),
+            // ElevatedButton(
+            //   child: Text("Load"),
+            //   onPressed: load,
+            // ),
+            // ElevatedButton(
+            //   child: Text("Update"),
+            //   onPressed: update,
+            // ),
+            // ElevatedButton(
+            //   child: Text("Remover"),
+            //   onPressed: remove,
+            // ),
+            // ElevatedButton(
+            //   child: Text("Tempo real"),
+            //   onPressed: realtime,
+            // ),
+            // ElevatedButton(
+            //   child: Text("Filtrar"),
+            //   onPressed: filter,
+            // ),
+            // ElevatedButton(
+            //   child: Text("Cadastrar"),
+            //   onPressed: createUser,
+            // ),
+            // ElevatedButton(
+            //   child: Text("Login"),
+            //   onPressed: login,
+            // ),
+            // MyCard(onPressed: updatev),
+            // Text("${numbers}"),
             ElevatedButton(
-              child: Text("Click"),
-              onPressed: create,
+              child: Text("Camera"),
+              onPressed: pickImageCamera,
             ),
             ElevatedButton(
-              child: Text("Load"),
-              onPressed: load,
+              child: Text("Galeria"),
+              onPressed: pickImageGalery,
             ),
             ElevatedButton(
-              child: Text("Update"),
-              onPressed: update,
+              child: Text("Upload"),
+              onPressed: uploadStorageFirebase,
             ),
-            ElevatedButton(
-              child: Text("Remover"),
-              onPressed: remove,
-            ),
-            ElevatedButton(
-              child: Text("Tempo real"),
-              onPressed: realtime,
-            ),
-            ElevatedButton(
-              child: Text("Filtrar"),
-              onPressed: filter,
-            ),
+            imageFile != null ? Image.file(imageFile!) : Text("Ainda n tem imagem")
+
           ],
         ),
+      ),
+    );
+  }
+}
+
+
+class MyCard extends StatefulWidget {
+  const MyCard({super.key, this.onPressed, this.login});
+  final void Function()? onPressed;
+  final GestureTapCallback? login;
+
+  @override
+  State<MyCard> createState() => _MyCardState();
+}
+
+class _MyCardState extends State<MyCard> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ElevatedButton(
+        onPressed: widget.onPressed,
+        child: Text("Click"),
       ),
     );
   }
