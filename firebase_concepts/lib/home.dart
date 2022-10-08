@@ -111,13 +111,40 @@ FirebaseFirestore db = FirebaseFirestore.instance;
       });
   }
 
+  String _statusUpload = "Upload não iniciado";
+  String _urlImagemRecuperada = "";
+
   Future uploadStorageFirebase() async {
+    String url;
     FirebaseStorage storage = FirebaseStorage.instance;
-    final pack = storage.ref();
-    final archive = pack
+    Reference  pack = storage.ref();
+    Reference  archive = pack
     .child("fotos")
     .child("foto1.jpg");
-    archive.putFile(imageFile!);
+    UploadTask task = archive.putFile(imageFile!);
+    task.snapshotEvents.listen((TaskSnapshot event) {
+      if ( event.state == TaskState.running ){
+ 
+        setState(() {
+          _statusUpload = "Em progresso";
+        });
+ 
+      }else if( event.state == TaskState.success ) {
+ 
+        setState(() {
+          _statusUpload = "Upload realizado com sucesso!";
+        });
+      }
+      
+    });
+    String urlImage = await (await task).ref.getDownloadURL();
+    print("URL: " + urlImage.toString());
+ 
+    setState(() {
+      _urlImagemRecuperada = urlImage;
+    });
+
+    print(_urlImagemRecuperada );
   }
 
   @override
@@ -175,6 +202,8 @@ FirebaseFirestore db = FirebaseFirestore.instance;
               child: Text("Upload"),
               onPressed: uploadStorageFirebase,
             ),
+            Text(_statusUpload),
+            Text(_urlImagemRecuperada ),
             imageFile != null ? Image.file(imageFile!) : Text("Ainda n tem imagem")
 
           ],
