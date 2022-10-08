@@ -19,13 +19,30 @@ FirebaseFirestore db = FirebaseFirestore.instance;
   void load() async{
     QuerySnapshot response = await db.collection('counter')
     .get();
-    print(response.docs[0]);
+    for(DocumentSnapshot item in response.docs){
+      var dataItem = item.data();
+      print(dataItem);
+    }
   }
 
   void update() async{
     db.collection('counter').doc("3KI76sUfFpoC1L3btEGS")
     .set({
       "counter": 2
+    });
+  }
+
+  void remove() async{
+    db.collection('counter').doc("3KI76sUfFpoC1L3btEGS")
+    .delete();
+  }
+
+  void realtime() async{
+    db.collection('counter').snapshots().listen((response) {
+      for(DocumentSnapshot item in response.docs){
+        var dataItem = item.data();
+        print(dataItem);
+      }
     });
   }
 
@@ -49,6 +66,14 @@ FirebaseFirestore db = FirebaseFirestore.instance;
             ElevatedButton(
               child: Text("Update"),
               onPressed: update,
+            ),
+            ElevatedButton(
+              child: Text("Remover"),
+              onPressed: remove,
+            ),
+            ElevatedButton(
+              child: Text("Tempo real"),
+              onPressed: realtime,
             ),
           ],
         ),
