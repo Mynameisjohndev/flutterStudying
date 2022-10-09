@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:whatsapp_clone/firebase_options.dart';
 import 'package:whatsapp_clone/home.dart';
+import 'package:whatsapp_clone/Login.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,6 +10,11 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MaterialApp(
-    home: Home(),
+    home: Login(),
+    theme: ThemeData(
+      primaryColor: Color(0xff075e54),
+      accentColor: Color(0xff25d366)
+    ),
+    debugShowCheckedModeBanner: false,
   ));
 }
