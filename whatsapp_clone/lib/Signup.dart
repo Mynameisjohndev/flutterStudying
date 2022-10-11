@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsapp_clone/Login.dart';
+import 'package:whatsapp_clone/model/User.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -20,7 +22,10 @@ class _SignupState extends State<Signup> {
 
   @override
   Widget build(BuildContext context) {
-    void createUser(String name, String email, String password) {}
+    void createUser(MyUser user) {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      auth.createUserWithEmailAndPassword(email: user.email!, password: user.password!);
+    }
 
     void validInputs() {
       String name = _controllerName.text;
@@ -39,6 +44,11 @@ class _SignupState extends State<Signup> {
                 messagePasswordError = "";
                 messageRepeatPasswordError = "";
               });
+              MyUser user = MyUser();
+              user.password = password;
+              user.name = name;
+              user.email = email;
+              createUser(user);
             } else {
               setState(() {
                 String message = "As senhas informadas nao se conhecidem";
@@ -46,17 +56,10 @@ class _SignupState extends State<Signup> {
                 messageRepeatPasswordError = message;
               });
             }
-            // if(password == repeatPassword){
-            //   print({
-            //     repeatPassword,
-            //     password,
-            //   });
             setState(() {
               messagePasswordError = "";
               messageRepeatPasswordError = "";
             });
-            // createUser(name, email, password);
-            // }
           } else {
             setState(() {
               messagePasswordError = "Preencha o campo de senha corretamente!";
