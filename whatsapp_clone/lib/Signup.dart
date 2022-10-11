@@ -9,8 +9,73 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  TextEditingController _controllerName = TextEditingController();
+  TextEditingController _controllerEmail = TextEditingController();
+  TextEditingController _controllerPassword = TextEditingController();
+  TextEditingController _controllerRepeatPassword = TextEditingController();
+  String? messageNameError = '';
+  String? messageEmailError = '';
+  String? messageRepeatPasswordError = '';
+  String? messagePasswordError = '';
+
   @override
   Widget build(BuildContext context) {
+    void createUser(String name, String email, String password) {}
+
+    void validInputs() {
+      String name = _controllerName.text;
+      String email = _controllerEmail.text;
+      String password = _controllerPassword.text;
+      String repeatPassword = _controllerRepeatPassword.text;
+      if (name.isNotEmpty && name.length > 3) {
+        messageNameError = "";
+        if (email.isNotEmpty && email.contains("@")) {
+          messageEmailError = "";
+          print(repeatPassword);
+          print(password);
+          if ((password.isNotEmpty && repeatPassword.isNotEmpty)) {
+            if (password.toString() == repeatPassword.toString()) {
+              setState(() {
+                messagePasswordError = "";
+                messageRepeatPasswordError = "";
+              });
+            } else {
+              setState(() {
+                String message = "As senhas informadas nao se conhecidem";
+                messagePasswordError = message;
+                messageRepeatPasswordError = message;
+              });
+            }
+            // if(password == repeatPassword){
+            //   print({
+            //     repeatPassword,
+            //     password,
+            //   });
+            setState(() {
+              messagePasswordError = "";
+              messageRepeatPasswordError = "";
+            });
+            // createUser(name, email, password);
+            // }
+          } else {
+            setState(() {
+              messagePasswordError = "Preencha o campo de senha corretamente!";
+              messageRepeatPasswordError =
+                  "Preencha o campo de repetir senha corretamente!";
+            });
+          }
+        } else {
+          setState(() {
+            messageEmailError = "Preencha o campo de e-mail corretamente!";
+          });
+        }
+      } else {
+        setState(() {
+          messageNameError = "Preencha o campo de nome corretamente!";
+        });
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Siignup"),
@@ -28,13 +93,14 @@ class _SignupState extends State<Signup> {
                   padding: EdgeInsets.only(bottom: 32),
                   child: Image.asset(
                     "images/usuario.png",
-                    width: 200,
-                    height: 150,
+                    width: 100,
+                    height: 50,
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8),
                   child: TextField(
+                    controller: _controllerName,
                     autofocus: true,
                     keyboardType: TextInputType.text,
                     style: TextStyle(fontSize: 20),
@@ -56,9 +122,19 @@ class _SignupState extends State<Signup> {
                     ),
                   ),
                 ),
+                messageNameError != ""
+                    ? Text(
+                        messageNameError!,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.red.shade400,
+                        ),
+                      )
+                    : Container(),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 8),
+                  padding: EdgeInsets.only(bottom: 8, top: 8),
                   child: TextField(
+                    controller: _controllerEmail,
                     keyboardType: TextInputType.emailAddress,
                     style: TextStyle(fontSize: 20),
                     decoration: InputDecoration(
@@ -79,10 +155,26 @@ class _SignupState extends State<Signup> {
                     ),
                   ),
                 ),
-                TextField(
-                  keyboardType: TextInputType.text,
-                  style: TextStyle(fontSize: 20),
-                  decoration: InputDecoration(
+                messageEmailError != ""
+                    ? Text(
+                        messageEmailError!,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.red.shade400,
+                        ),
+                      )
+                    : Container(),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 8, top: 8),
+                  child: TextField(
+                    controller: _controllerRepeatPassword,
+                    keyboardType: TextInputType.text,
+                    style: TextStyle(fontSize: 20),
+                    decoration: InputDecoration(
+                      // enabledBorder: OutlineInputBorder(
+                      //   borderSide: BorderSide(width: 3, color: Colors.greenAccent),
+                      //   borderRadius: BorderRadius.circular(32)
+                      // ),
                       focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 3, color: Colors.greenAccent),
@@ -92,8 +184,47 @@ class _SignupState extends State<Signup> {
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(32))),
+                          borderRadius: BorderRadius.circular(32)),
+                    ),
+                  ),
                 ),
+                messagePasswordError != ""
+                    ? Text(
+                        messagePasswordError!,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.red.shade400,
+                        ),
+                      )
+                    : Container(),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 8, top: 8),
+                  child: TextField(
+                    controller: _controllerPassword,
+                    keyboardType: TextInputType.text,
+                    style: TextStyle(fontSize: 20),
+                    decoration: InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 3, color: Colors.greenAccent),
+                            borderRadius: BorderRadius.circular(32)),
+                        contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                        hintText: "Repetir senha",
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(32))),
+                  ),
+                ),
+                messageRepeatPasswordError != ""
+                    ? Text(
+                        messageRepeatPasswordError!,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.red.shade400,
+                        ),
+                      )
+                    : Container(),
                 Padding(
                   padding: EdgeInsets.only(top: 16, bottom: 10),
                   child: ElevatedButton(
@@ -107,7 +238,9 @@ class _SignupState extends State<Signup> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(32)),
                       ),
-                      onPressed: () {}),
+                      onPressed: () {
+                        validInputs();
+                      }),
                 ),
                 Center(
                   child: GestureDetector(
