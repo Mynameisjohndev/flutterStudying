@@ -118,25 +118,29 @@ class _SignupState extends State<Signup> {
                   controller: _controllerName,
                   hintText: "Nome",
                   message: messageNameError!,
-                  typeInput: TextInputType.text 
+                  typeInput: TextInputType.text,
+                  isSecure: false,
                 ),
                 InputForm(
                   controller: _controllerEmail,
                   hintText: "Email",
                   message: messageEmailError!,
-                  typeInput: TextInputType.emailAddress 
+                  typeInput: TextInputType.emailAddress,
+                  isSecure: false,
                 ),
                 InputForm(
                   controller: _controllerPassword,
                   hintText: "Senha",
                   message: messagePasswordError!,
-                  typeInput: TextInputType.text 
+                  typeInput: TextInputType.text,
+                  isSecure: true,
                 ),
                 InputForm(
                   controller: _controllerRepeatPassword,
                   hintText: "Repetir senha",
                   message: messageRepeatPasswordError!,
-                  typeInput: TextInputType.text 
+                  typeInput: TextInputType.text,
+                  isSecure: true,
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 16, bottom: 10),
@@ -189,4 +193,3 @@ class LogoImage extends StatelessWidget {
     ;
   }
 }
-

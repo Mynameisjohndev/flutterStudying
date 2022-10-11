@@ -6,16 +6,20 @@ class InputForm extends StatefulWidget {
       required this.controller,
       required this.message,
       required this.typeInput,
-      required this.hintText});
+      required this.hintText,
+      required this.isSecure,
+      });
   final TextEditingController controller;
   final String message;
   final TextInputType typeInput;
   final String hintText;
+  final bool isSecure;
   @override
   State<InputForm> createState() => _InputFormState();
 }
 
 class _InputFormState extends State<InputForm> {
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,6 +30,7 @@ class _InputFormState extends State<InputForm> {
             controller: widget.controller,
             autofocus: true,
             keyboardType: widget.typeInput,
+            obscureText: widget.isSecure == true ? true : false,
             style: TextStyle(fontSize: 20),
             decoration: InputDecoration(
               // enabledBorder: OutlineInputBorder(
