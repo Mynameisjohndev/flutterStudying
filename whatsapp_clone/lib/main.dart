@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:whatsapp_clone/firebase_options.dart';
-import 'package:whatsapp_clone/home.dart';
 import 'package:whatsapp_clone/Login.dart';
 
 void main() async{
@@ -15,6 +14,7 @@ void main() async{
       primaryColor: Color(0xff075e54),
       accentColor: Color(0xff25d366)
     ),
+    
     debugShowCheckedModeBanner: false,
   ));
 }

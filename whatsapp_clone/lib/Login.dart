@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp_clone/Signup.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -37,7 +38,7 @@ class _LoginState extends State<Login> {
                         //   borderRadius: BorderRadius.circular(32)
                         // ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.greenAccent),
+                          borderSide: BorderSide(width: 3, color: Colors.greenAccent),
                           borderRadius: BorderRadius.circular(32)
                         ),
                         contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
@@ -54,7 +55,7 @@ class _LoginState extends State<Login> {
                   style: TextStyle(fontSize: 20),
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.greenAccent),
+                          borderSide: BorderSide(width: 3, color: Colors.greenAccent),
                           borderRadius: BorderRadius.circular(32)
                       ),
                       contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
@@ -89,7 +90,12 @@ class _LoginState extends State<Login> {
                         )
                     ),
                     onTap: (){
-
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(
+                          builder: (context) => Signup(),
+                        )
+                      );
                     },
                   ),
                 )
