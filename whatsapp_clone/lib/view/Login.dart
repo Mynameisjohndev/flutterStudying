@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:whatsapp_clone/Signup.dart';
+import 'package:whatsapp_clone/view/Signup.dart';
 
 class Login extends StatefulWidget {
   @override
