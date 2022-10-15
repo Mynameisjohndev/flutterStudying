@@ -36,11 +36,14 @@ class _SignupState extends State<Signup> {
       auth
           .createUserWithEmailAndPassword(
               email: user.email!, password: user.password!)
-          .then((value) => {
+          .then((UserCredential response) => {
                 alert.title = "Parabéns",
                 alert.body = "Sua conta foi criada com sucesso!",
                 alert.type = "success_signin",
-                alertDialogSuccessOrError(alert: alert)
+                alertDialogSuccessOrError(alert: alert),
+                db.collection('users').
+                doc(response.user?.uid).
+                set(user.toMap())
               })
           .catchError((onError) => {
                 alert.title = "Erro :(",
@@ -146,7 +149,7 @@ class _SignupState extends State<Signup> {
                   padding: EdgeInsets.only(top: 16, bottom: 10),
                   child: ElevatedButton(
                       child: Text(
-                        "Entrar",
+                        "Cadastrar",
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                       style: ElevatedButton.styleFrom(

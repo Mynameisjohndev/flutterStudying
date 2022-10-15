@@ -14,7 +14,7 @@ alertDialogSuccessOrError({required AlertSuccesOrErorr alert}) {
           TextButton(
             onPressed: () {
               if (alert.type! == "success_signin") {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context, MaterialPageRoute(builder: (context) => Home()));
               }
               // Navigator.of(context).pop();

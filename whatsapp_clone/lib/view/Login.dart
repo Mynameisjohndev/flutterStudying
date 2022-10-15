@@ -76,7 +76,7 @@ class _LoginState extends State<Login> {
         setState(() {
           isLoged = true;
         });
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Home()));
       }
     });
@@ -107,21 +107,13 @@ class _LoginState extends State<Login> {
                     height: 150,
                   ),
                 ),
-                isLoged == false
-                    ? Column(children: [
-                        CircularProgressIndicator(),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10),
-                          child: Text("Buscando dados do usuário"),
-                        ),
-                      ])
-                    : InputForm(
-                        controller: _controllerEmail,
-                        hintText: "Email",
-                        message: messageEmailError!,
-                        typeInput: TextInputType.emailAddress,
-                        isSecure: false,
-                      ),
+                InputForm(
+                  controller: _controllerEmail,
+                  hintText: "Email",
+                  message: messageEmailError!,
+                  typeInput: TextInputType.emailAddress,
+                  isSecure: false,
+                ),
                 InputForm(
                   controller: _controllerPassword,
                   hintText: "Senha",
