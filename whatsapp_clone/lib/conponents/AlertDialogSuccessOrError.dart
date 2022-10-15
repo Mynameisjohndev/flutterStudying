@@ -14,10 +14,10 @@ alertDialogSuccessOrError({required AlertSuccesOrErorr alert}) {
           TextButton(
             onPressed: () {
               if (alert.type! == "success_signin") {
-                Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => Home()));
+                Navigator.pushNamedAndRemoveUntil(alert.context!, "/home", (_)=>false);
+              }else{ 
+                Navigator.of(alert.context!).pop();
               }
-              // Navigator.of(context).pop();
             },
             child: Text('Ok'),
           ),

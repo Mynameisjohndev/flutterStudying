@@ -11,9 +11,9 @@ class Chats extends StatefulWidget {
 class _ChatsState extends State<Chats> {
 
   List<Chat> chatList = [
-    Chat("Lucas", "Como você vai", "https://firebasestorage.googleapis.com/v0/b/whatsappflutter-715ad.appspot.com/o/userPhoto%2Fperfil1.jpg?alt=media&token=642bc8b1-815e-4442-b3b0-a3d9bc8737bb"),
-    Chat("Lucas", "Como você vai", "https://firebasestorage.googleapis.com/v0/b/whatsappflutter-715ad.appspot.com/o/userPhoto%2Fperfil1.jpg?alt=media&token=642bc8b1-815e-4442-b3b0-a3d9bc8737bb"),
-    Chat("Lucas", "Como você vai", "https://firebasestorage.googleapis.com/v0/b/whatsappflutter-715ad.appspot.com/o/userPhoto%2Fperfil1.jpg?alt=media&token=642bc8b1-815e-4442-b3b0-a3d9bc8737bb"),
+    Chat("Meu amor ❤", "Como você vai", "https://firebasestorage.googleapis.com/v0/b/whatsappflutter-715ad.appspot.com/o/userPhoto%2F297198350_744858636953138_6294962469889980768_n.jpg?alt=media&token=58a0ebb0-d90d-4dff-84ff-d08a7329cddb"),
+    Chat("Meu amor ❤", "Como você vai", "https://firebasestorage.googleapis.com/v0/b/whatsappflutter-715ad.appspot.com/o/userPhoto%2F297198350_744858636953138_6294962469889980768_n.jpg?alt=media&token=58a0ebb0-d90d-4dff-84ff-d08a7329cddb"),
+    Chat("Meu amor ❤", "Como você vai", "https://firebasestorage.googleapis.com/v0/b/whatsappflutter-715ad.appspot.com/o/userPhoto%2F297198350_744858636953138_6294962469889980768_n.jpg?alt=media&token=58a0ebb0-d90d-4dff-84ff-d08a7329cddb"),
   ];
 
   @override

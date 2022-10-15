@@ -41,9 +41,7 @@ class _SignupState extends State<Signup> {
                 alert.body = "Sua conta foi criada com sucesso!",
                 alert.type = "success_signin",
                 alertDialogSuccessOrError(alert: alert),
-                db.collection('users').
-                doc(response.user?.uid).
-                set(user.toMap())
+                db.collection('users').doc(response.user?.uid).set(user.toMap())
               })
           .catchError((onError) => {
                 alert.title = "Erro :(",

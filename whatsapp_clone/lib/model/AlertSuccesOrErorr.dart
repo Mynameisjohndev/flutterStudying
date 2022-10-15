@@ -6,7 +6,7 @@ class AlertSuccesOrErorr{
   String? _body;
   String? _type;
   BuildContext? _context;
-
+  
   AlertSuccesOrErorr();
 
   String? get title => _title;

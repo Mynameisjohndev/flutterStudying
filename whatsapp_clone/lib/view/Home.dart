@@ -43,8 +43,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   _signoutUser()async{
     await auth.signOut();
-     Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Login()));
+    Navigator.pushReplacementNamed(context, "/");
   }
 
   @override

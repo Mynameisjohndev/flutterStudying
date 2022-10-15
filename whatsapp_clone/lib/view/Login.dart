@@ -76,8 +76,7 @@ class _LoginState extends State<Login> {
         setState(() {
           isLoged = true;
         });
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Home()));
+        Navigator.pushReplacementNamed(context, "/home");
       }
     });
   }
@@ -145,11 +144,7 @@ class _LoginState extends State<Login> {
                     child: Text("Não tem conta? cadastre-se!",
                         style: TextStyle(color: Colors.white)),
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Signup(),
-                          ));
+                      Navigator.pushReplacementNamed(context, "/signup");
                     },
                   ),
                 )
