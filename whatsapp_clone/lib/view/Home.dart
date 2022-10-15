@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsapp_clone/screens/chats.dart';
 import 'package:whatsapp_clone/screens/contacts.dart';
+import 'package:whatsapp_clone/view/Login.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,17 +13,38 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late TabController _tabBarController;
+  List<String> menuOptions = [
+    "Configurações", "Deslogar"
+  ];
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    auth.authStateChanges().listen((User? user) {
       if (user == null) {
       } else {
         print(user);
       }
     });
     _tabBarController = TabController(length: 2, vsync: this);
+  }
+
+  _selecetMenuOption(String option){
+    switch(option){
+      case "Configurações":
+      break;
+      case "Deslogar":
+      _signoutUser();
+      break;
+      default: 
+    }
+  }
+
+  _signoutUser()async{
+    await auth.signOut();
+     Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Login()));
   }
 
   @override
@@ -44,7 +66,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               Tab(
                 text: "Contatos",
               ),
-            ]),
+            ]
+            ),
+            actions: [
+              PopupMenuButton<String>(
+
+                onSelected: _selecetMenuOption,
+                itemBuilder: (context){
+                  return menuOptions.map((item){
+                    return PopupMenuItem<String>(
+                      value: item,
+                      child: Text(item)
+                    );
+                  }).toList();
+                },
+              )
+            ],
       ),
       body: TabBarView(
         controller: _tabBarController,
