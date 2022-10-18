@@ -21,12 +21,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    auth.authStateChanges().listen((User? user) {
-      if (user == null) {
-      } else {
-        print(user);
-      }
-    });
     _tabBarController = TabController(length: 2, vsync: this);
   }
 

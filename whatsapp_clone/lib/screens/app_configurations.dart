@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:whatsapp_clone/conponents/InputForm.dart';
@@ -14,10 +17,10 @@ class AppConfigurations extends StatefulWidget {
 class _AppConfigurationsState extends State<AppConfigurations> {
   TextEditingController _controllerEmail = TextEditingController(text: "");
   String? messageEmailError = '';
-
-  void saveUserPhoto() {}
-
   File? imageFile;
+  bool _statusUpload = false;
+  String _urlImageDowload = "";
+  User? userLoged;
 
   Future pickImageCamera() async {
     var image = await ImagePicker().pickImage(source: ImageSource.camera);
@@ -35,6 +38,40 @@ class _AppConfigurationsState extends State<AppConfigurations> {
     });
   }
 
+  Future uploadStorageFirebase() async {
+    // print(userLoged);
+    String url;
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference  pack = storage.ref();
+    Reference  archive = pack
+    .child("fotos")
+    .child("${userLoged?.uid}.jpg");
+    UploadTask task = archive.putFile(imageFile!);
+    task.snapshotEvents.listen((TaskSnapshot event) {
+      if ( event.state == TaskState.running ){
+        setState(() {
+          _statusUpload = true;
+        });
+      }else if( event.state == TaskState.success ) {
+        setState(() {
+          _statusUpload = false;
+        });
+        // FirebaseFirestore.instance.collection("").doc()
+      }
+    });
+    // String urlImage = await (await task).ref.getDownloadURL();
+  }
+
+  @override
+  void initState() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      setState(() {
+        userLoged = user;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +85,9 @@ class _AppConfigurationsState extends State<AppConfigurations> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                // ignore: unnecessary_null_comparison
+                _statusUpload
+                    ? CircularProgressIndicator()
+                    : Container(),
                 imageFile != null
                     ? Container(
                         width: 220,
@@ -66,7 +105,7 @@ class _AppConfigurationsState extends State<AppConfigurations> {
                             image: DecorationImage(
                                 fit: BoxFit.fill,
                                 image: NetworkImage(
-                                    "https://firebasestorage.googleapis.com/v0/b/whatsappflutter-715ad.appspot.com/o/userPhoto%2F297198350_744858636953138_6294962469889980768_n.jpg?alt=media&token=58a0ebb0-d90d-4dff-84ff-d08a7329cddb")))),
+                                    "https://firebasestorage.googleapis.com/v0/b/whatsappflutter-715ad.appspot.com/o/userPhoto%2Fperfil4.jpg?alt=media&token=224ef3d7-a98c-4136-84cf-ef11be898d7f")))),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -99,7 +138,7 @@ class _AppConfigurationsState extends State<AppConfigurations> {
                             borderRadius: BorderRadius.circular(32)),
                       ),
                       onPressed: () {
-                        saveUserPhoto();
+                        uploadStorageFirebase();
                       }),
                 ),
               ],
