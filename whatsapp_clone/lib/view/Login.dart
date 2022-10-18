@@ -74,7 +74,6 @@ class _LoginState extends State<Login> {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
       } else {
-        print("A função foi chamada");
         setState(() {
           isLoged = true;
         });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp_clone/screens/app_configurations.dart';
 import 'package:whatsapp_clone/view/Home.dart';
 import 'package:whatsapp_clone/view/Login.dart';
 import 'package:whatsapp_clone/view/Signup.dart';
@@ -15,6 +16,8 @@ class RouteGenerator {
         return returnPage(Signup());
       case "/home":
         return returnPage(Home());
+      case "/configs":
+        return returnPage(AppConfigurations());
       default:
         _errorRoute();
     }
