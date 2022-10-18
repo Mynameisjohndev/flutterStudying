@@ -15,12 +15,14 @@ class AppConfigurations extends StatefulWidget {
 }
 
 class _AppConfigurationsState extends State<AppConfigurations> {
-  TextEditingController _controllerEmail = TextEditingController(text: "");
-  String? messageEmailError = '';
+  TextEditingController _controllerName = TextEditingController(text: "");
+  String? messageNameError = '';
   File? imageFile;
   bool _statusUpload = false;
-  String _urlImageDowload = "";
   User? userLoged;
+  String? loadedImage =
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__480.png";
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future pickImageCamera() async {
     var image = await ImagePicker().pickImage(source: ImageSource.camera);
@@ -39,35 +41,64 @@ class _AppConfigurationsState extends State<AppConfigurations> {
   }
 
   Future uploadStorageFirebase() async {
-    // print(userLoged);
-    String url;
     FirebaseStorage storage = FirebaseStorage.instance;
-    Reference  pack = storage.ref();
-    Reference  archive = pack
-    .child("fotos")
-    .child("${userLoged?.uid}.jpg");
+    Reference pack = storage.ref();
+    Reference archive = pack.child("fotos").child("${userLoged?.uid}.jpg");
     UploadTask task = archive.putFile(imageFile!);
-    task.snapshotEvents.listen((TaskSnapshot event) {
-      if ( event.state == TaskState.running ){
+    task.snapshotEvents.listen((TaskSnapshot event) async {
+      if (event.state == TaskState.running) {
         setState(() {
           _statusUpload = true;
         });
-      }else if( event.state == TaskState.success ) {
+      } else if (event.state == TaskState.success) {
         setState(() {
           _statusUpload = false;
         });
-        // FirebaseFirestore.instance.collection("").doc()
+        String urlImage = await (await task).ref.getDownloadURL();
+        firestore
+            .collection("users")
+            .doc(userLoged?.uid)
+            .update({"profile": urlImage});
       }
     });
-    // String urlImage = await (await task).ref.getDownloadURL();
+  }
+
+  loadUserInformation(User user) async {
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .get();
+    dynamic data = doc.data();
+    _controllerName.text = data["name"];
+    if (data["profile"] != null) {
+      setState(() {
+        loadedImage = data["profile"];
+      });
+    }
+  }
+
+  updateUserName() async {
+    String newName = _controllerName.text;
+    if (newName.length < 3) {
+      return setState(() {
+        messageNameError = "O nome precisa ter no mínimo 3 caracteres.";
+      });
+    }
+    setState(() {
+      messageNameError = "";
+    });
+    firestore.collection("users").doc(userLoged?.uid).update({"name": newName});
   }
 
   @override
   void initState() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      setState(() {
-        userLoged = user;
-      });
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+      if (user != null) {
+        loadUserInformation(user);
+        setState(() {
+          userLoged = user;
+        });
+      }
     });
     super.initState();
   }
@@ -84,10 +115,9 @@ class _AppConfigurationsState extends State<AppConfigurations> {
         child: Center(
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                _statusUpload
-                    ? CircularProgressIndicator()
-                    : Container(),
+                _statusUpload ? CircularProgressIndicator() : Container(),
                 imageFile != null
                     ? Container(
                         width: 220,
@@ -104,8 +134,7 @@ class _AppConfigurationsState extends State<AppConfigurations> {
                             shape: BoxShape.circle,
                             image: DecorationImage(
                                 fit: BoxFit.fill,
-                                image: NetworkImage(
-                                    "https://firebasestorage.googleapis.com/v0/b/whatsappflutter-715ad.appspot.com/o/userPhoto%2Fperfil4.jpg?alt=media&token=224ef3d7-a98c-4136-84cf-ef11be898d7f")))),
+                                image: NetworkImage(loadedImage!)))),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -116,31 +145,56 @@ class _AppConfigurationsState extends State<AppConfigurations> {
                   ],
                 ),
                 InputForm(
-                  controller: _controllerEmail,
-                  hintText: "Email",
-                  message: messageEmailError!,
-                  typeInput: TextInputType.emailAddress,
+                  controller: _controllerName,
+                  hintText: "Nome",
+                  message: messageNameError!,
+                  typeInput: TextInputType.text,
                   isSecure: false,
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 16, bottom: 10),
-                  child: ElevatedButton(
-                      child: Text(
-                        "Salvar",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        // minimumSize:
-                        //     Size(MediaQuery.of(context).size.width, 60),
-                        padding: EdgeInsets.fromLTRB(32, 16, 32, 16),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(32)),
-                      ),
-                      onPressed: () {
-                        uploadStorageFirebase();
-                      }),
-                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 16, bottom: 10),
+                      child: ElevatedButton(
+                          child: Text(
+                            "Salvar foto",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            minimumSize: Size(
+                                MediaQuery.of(context).size.width * 0.43, 60),
+                            padding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(32)),
+                          ),
+                          onPressed: () {
+                            uploadStorageFirebase();
+                          }),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 16, bottom: 10),
+                      child: ElevatedButton(
+                          child: Text(
+                            "Salvar nome",
+                            style: TextStyle(color: Colors.white, fontSize: 20),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            minimumSize: Size(
+                                MediaQuery.of(context).size.width * 0.43, 60),
+                            padding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(32)),
+                          ),
+                          onPressed: () {
+                            updateUserName();
+                          }),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
