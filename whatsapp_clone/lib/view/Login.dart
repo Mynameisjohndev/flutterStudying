@@ -31,14 +31,15 @@ class _LoginState extends State<Login> {
         .then((value) => {
               alert.title = "Parabéns",
               alert.body = "Sua conta foi logada com sucesso!",
-              alert.type = "success_signin",
-              alertDialogSuccessOrError(alert: alert)
+              alert.type = "success",
+              showMyAlert(alert: alert)
             })
         .catchError((onError) => {
               alert.title = "Erro :(",
               alert.body = "Houve um erro durante o login de sua conta"
                   " tente novamente",
-              alertDialogSuccessOrError(alert: alert)
+              alert.type = "",
+              showMyAlert(alert: alert)
             });
   }
 
@@ -73,12 +74,13 @@ class _LoginState extends State<Login> {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
       } else {
+        print("A função foi chamada");
         setState(() {
           isLoged = true;
         });
-        Navigator.pushReplacementNamed(context, "/home");
+        Navigator.pushNamedAndRemoveUntil(context, "/home", (_)=> false);
       }
-    });
+    }); 
   }
 
   @override
@@ -144,7 +146,12 @@ class _LoginState extends State<Login> {
                     child: Text("Não tem conta? cadastre-se!",
                         style: TextStyle(color: Colors.white)),
                     onTap: () {
-                      Navigator.pushReplacementNamed(context, "/signup");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Signup()
+                          )
+                      );
                     },
                   ),
                 )

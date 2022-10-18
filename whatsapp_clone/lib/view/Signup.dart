@@ -39,15 +39,23 @@ class _SignupState extends State<Signup> {
           .then((UserCredential response) => {
                 alert.title = "Parabéns",
                 alert.body = "Sua conta foi criada com sucesso!",
-                alert.type = "success_signin",
-                alertDialogSuccessOrError(alert: alert),
-                db.collection('users').doc(response.user?.uid).set(user.toMap())
+                alert.type = "success_signup",
+                db
+                    .collection('users')
+                    .doc(response.user?.uid)
+                    .set(user.toMap())
+                    .then((value) => () {
+                          // Navigator.pushNamedAndRemoveUntil(
+                          //     context, "/home", (_) => false);
+                          // showMyAlert(alert: alert);
+                        })
               })
           .catchError((onError) => {
                 alert.title = "Erro :(",
+                alert.type = "",
                 alert.body = "Houve um erro durante a criação de sua conta"
                     " tente novamente dentro de instantes",
-                alertDialogSuccessOrError(alert: alert)
+                showMyAlert(alert: alert)
               });
     }
 
@@ -103,7 +111,7 @@ class _SignupState extends State<Signup> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Siignup"),
+        title: Text("Signup"),
         backgroundColor: Color(0xff075E54),
       ),
       body: Container(
@@ -165,7 +173,8 @@ class _SignupState extends State<Signup> {
                     child: Text("Já possuo conta",
                         style: TextStyle(color: Colors.white)),
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, "/login", (_) => false);
                     },
                   ),
                 )
