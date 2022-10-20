@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:whatsapp_clone/model/User.dart';
 import 'package:whatsapp_clone/screens/app_configurations.dart';
+import 'package:whatsapp_clone/screens/chatMessage.dart';
 import 'package:whatsapp_clone/view/Home.dart';
 import 'package:whatsapp_clone/view/Login.dart';
 import 'package:whatsapp_clone/view/Signup.dart';
@@ -7,6 +9,8 @@ import 'package:whatsapp_clone/view/Signup.dart';
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
   
+    final args = settings.arguments as MyUser;
+
     switch (settings.name) {
       case "/":
         return returnPage(Login());
@@ -18,6 +22,8 @@ class RouteGenerator {
         return returnPage(Home());
       case "/configs":
         return returnPage(AppConfigurations());
+      case "/chat":
+        return returnPage(ChatMessage(args));
       default:
         _errorRoute();
     }

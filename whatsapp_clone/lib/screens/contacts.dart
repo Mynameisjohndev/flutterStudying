@@ -12,7 +12,6 @@ class Contacts extends StatefulWidget {
 }
 
 class _ContactsState extends State<Contacts> {
-
   FirebaseFirestore db = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
   String? idUser;
@@ -29,12 +28,12 @@ class _ContactsState extends State<Contacts> {
     List<MyUser> users = [];
     for (DocumentSnapshot item in response.docs) {
       var dados = item.data() as Map;
-      if(dados["email"] == emailUser) continue;
-      MyUser usuario = MyUser();
-      usuario.email = dados["email"];
-      usuario.name = dados["name"];
-      usuario.profile = dados["profile"];
-      users.add(usuario);
+      if (dados["email"] == emailUser) continue;
+      MyUser user = MyUser();
+      user.email = dados["email"];
+      user.name = dados["name"];
+      user.profile = dados["profile"];
+      users.add(user);
     }
     return users;
   }
@@ -68,26 +67,32 @@ class _ContactsState extends State<Contacts> {
                 itemCount: snapshot.data?.length,
                 itemBuilder: (_, index) {
                   List<MyUser>? listaItens = snapshot.data;
-                  MyUser usuario = listaItens![index];
+                  MyUser user = listaItens![index];
                   return ListTile(
+                    onTap: (){
+                      print({user.name, user.email});
+                      Navigator.pushNamed(
+                        context, 
+                        "/chat",
+                        arguments: user
+                      );
+                    },
                     contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                     leading: CircleAvatar(
                       maxRadius: 30,
                       backgroundColor: Colors.grey,
-                      backgroundImage: usuario.profile != null
-                          ? NetworkImage(usuario.profile!)
+                      backgroundImage: user.profile != null
+                          ? NetworkImage(user.profile!)
                           : null,
                     ),
                     title: Text(
-                      usuario.name!,
+                      user.name!,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   );
                 });
-            break;
         }
-        return Container();
       },
     );
   }

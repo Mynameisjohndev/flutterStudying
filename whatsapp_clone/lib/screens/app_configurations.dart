@@ -115,7 +115,6 @@ class _AppConfigurationsState extends State<AppConfigurations> {
         child: Center(
           child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 _statusUpload ? CircularProgressIndicator() : Container(),
                 imageFile != null
@@ -166,7 +165,7 @@ class _AppConfigurationsState extends State<AppConfigurations> {
                             backgroundColor: Colors.green,
                             minimumSize: Size(
                                 MediaQuery.of(context).size.width * 0.43, 60),
-                            padding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                            // padding: EdgeInsets.fromLTRB(32, 16, 32, 16),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(32)),
                           ),
@@ -185,7 +184,7 @@ class _AppConfigurationsState extends State<AppConfigurations> {
                             backgroundColor: Colors.green,
                             minimumSize: Size(
                                 MediaQuery.of(context).size.width * 0.43, 60),
-                            padding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                            // padding: EdgeInsets.fromLTRB(32, 16, 32, 16),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(32)),
                           ),
@@ -194,7 +193,7 @@ class _AppConfigurationsState extends State<AppConfigurations> {
                           }),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
