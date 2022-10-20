@@ -9,7 +9,7 @@ import 'package:whatsapp_clone/view/Signup.dart';
 class RouteGenerator {
   static Route<dynamic>? generateRoute(RouteSettings settings) {
   
-    final args = settings.arguments as MyUser;
+    final args = settings.arguments as MyUser?;
 
     switch (settings.name) {
       case "/":

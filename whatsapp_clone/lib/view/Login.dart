@@ -32,7 +32,8 @@ class _LoginState extends State<Login> {
               alert.title = "Parabéns",
               alert.body = "Sua conta foi logada com sucesso!",
               alert.type = "success",
-              showMyAlert(alert: alert)
+              Navigator.pushNamed(context, "/home")
+                  .then((value) => {showMyAlert(alert: alert)}),
             })
         .catchError((onError) => {
               alert.title = "Erro :(",
@@ -77,9 +78,9 @@ class _LoginState extends State<Login> {
         setState(() {
           isLoged = true;
         });
-        Navigator.pushNamedAndRemoveUntil(context, "/home", (_)=> false);
+        Navigator.pushNamedAndRemoveUntil(context, "/home", (_) => false);
       }
-    }); 
+    });
   }
 
   @override
@@ -145,12 +146,8 @@ class _LoginState extends State<Login> {
                     child: Text("Não tem conta? cadastre-se!",
                         style: TextStyle(color: Colors.white)),
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Signup()
-                          )
-                      );
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Signup()));
                     },
                   ),
                 )
