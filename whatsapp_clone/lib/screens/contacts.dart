@@ -33,6 +33,7 @@ class _ContactsState extends State<Contacts> {
       user.email = dados["email"];
       user.name = dados["name"];
       user.profile = dados["profile"];
+      user.idUsuario = item.id;
       users.add(user);
     }
     return users;

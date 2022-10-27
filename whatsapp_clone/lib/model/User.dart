@@ -3,7 +3,8 @@ class MyUser{
   String? _email;
   String? _profile;
   String? _password;
- 
+  String? _idUsuario;
+
   MyUser();
 
   Map<String, dynamic> toMap(){
@@ -15,6 +16,11 @@ class MyUser{
 
     return map;
 
+  }
+  String? get idUsuario => _idUsuario;
+  
+  set idUsuario(String? idUsuario){
+    _idUsuario = idUsuario;
   }
 
   String? get profile => _profile;

@@ -21,6 +21,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _loadUserData();
     _tabBarController = TabController(length: 2, vsync: this);
   }
 
@@ -39,6 +40,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   _signoutUser()async{
     await auth.signOut();
     Navigator.pushReplacementNamed(context, "/");
+  }
+
+   _loadUserData() async {
+    var logedUser = FirebaseAuth.instance.currentUser;
+    if(logedUser == null){
+      Navigator.pushReplacementNamed(context, "/login");
+    }
   }
 
   @override
