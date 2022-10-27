@@ -3,9 +3,14 @@ class Message {
   String? _message;
   String? _urlImage;
   String? _type;
+  DateTime? _date;
 
   Message(
-      {String? idUsuario, String? message, String? urlImage, String? type}) {
+      {String? idUsuario,
+      String? message,
+      String? urlImage,
+      String? type,
+      DateTime? date}) {
     if (idUsuario != null) {
       this._idUsuario = idUsuario;
     }
@@ -18,8 +23,13 @@ class Message {
     if (type != null) {
       this._type = type;
     }
+    if (type != null) {
+      this._date = date;
+    }
   }
 
+  DateTime? get date => _date;
+  set date(DateTime? date) => _date = date;
   String? get idUsuario => _idUsuario;
   set idUsuario(String? idUsuario) => _idUsuario = idUsuario;
   String? get message => _message;
@@ -34,6 +44,7 @@ class Message {
     _message = json['message'];
     _urlImage = json['urlImage'];
     _type = json['type'];
+    _date = json['date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -42,6 +53,7 @@ class Message {
     data['message'] = this._message;
     data['urlImage'] = this._urlImage;
     data['type'] = this._type;
+    data['date'] = this._date;
     return data;
   }
 }

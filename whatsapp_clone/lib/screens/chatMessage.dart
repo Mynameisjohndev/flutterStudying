@@ -50,6 +50,7 @@ class _ChatMessageState extends State<ChatMessage> {
       newMessage.idUsuario = idUser;
       newMessage.message = messageText;
       newMessage.type = "text";
+      newMessage.date = DateTime.now();
       saveMessageInApp(idUser, idUserRecipient, newMessage);
     }
   }
