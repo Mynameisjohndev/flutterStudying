@@ -54,6 +54,7 @@ class _ChatMessageState extends State<ChatMessage> {
       newMessage.type = "text";
       newMessage.date = DateTime.now();
       saveMessageInApp(idUser, idUserRecipient, newMessage);
+      saveMessageInApp(idUserRecipient, idUser, newMessage);
     }
   }
 
@@ -61,8 +62,8 @@ class _ChatMessageState extends State<ChatMessage> {
       String? idRecipient, String? idSender, Message message) async {
     await db
         .collection('messages')
-        .doc(idSender!)
-        .collection(idRecipient!)
+        .doc(idRecipient!)
+        .collection(idSender!)
         .add(message.toJson());
     controllerMensagem.clear();
   }
@@ -94,8 +95,8 @@ class _ChatMessageState extends State<ChatMessage> {
     var stream = StreamBuilder(
       stream: db
         .collection("messages")
-        .doc(idUserRecipient)
-        .collection(idUser!)
+        .doc(idUser)
+        .collection(idUserRecipient)
         .snapshots(),
       builder: (context, AsyncSnapshot snapshot) {
         switch (snapshot.connectionState) {
