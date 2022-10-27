@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChatMessageList extends StatefulWidget {
-  const ChatMessageList(this.messages, {super.key});
-  final List<String> messages;
+  const ChatMessageList(this.messages, this.idUser,{super.key});
+  final List<DocumentSnapshot> messages;
+  final String idUser ;
   @override
   State<ChatMessageList> createState() => _ChatMessageListState();
 }
@@ -20,12 +22,13 @@ class _ChatMessageListState extends State<ChatMessageList> {
             Alignment myAlignment = Alignment.centerRight;
             Alignment hourMessage = Alignment.centerLeft;
             CrossAxisAlignment crossAxisAlignmentMessage = CrossAxisAlignment.end;
-            if (index % 2 == 0) {
+          if (widget.idUser != item["idUsuario"] ) {
               mycolor = Colors.white;
               myAlignment = Alignment.centerLeft;
               hourMessage = Alignment.centerRight;
               crossAxisAlignmentMessage = CrossAxisAlignment.start;
             }
+
             return Align(
               alignment: myAlignment,
               child: Padding(
@@ -41,7 +44,7 @@ class _ChatMessageListState extends State<ChatMessageList> {
                       crossAxisAlignment: crossAxisAlignmentMessage,
                       children: [
                         Text(
-                          item,
+                          item["message"],
                           style: TextStyle(fontSize: 18),
                         ),
                         Align(

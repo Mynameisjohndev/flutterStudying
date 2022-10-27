@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:whatsapp_clone/conponents/AlertDialogSuccessOrError.dart';
-import 'package:whatsapp_clone/conponents/InputForm.dart';
+import 'package:whatsapp_clone/components/AlertDialogSuccessOrError.dart';
+import 'package:whatsapp_clone/components/InputForm.dart';
 import 'package:whatsapp_clone/model/AlertSuccesOrErorr.dart';
 import 'package:whatsapp_clone/model/User.dart';
 import 'package:whatsapp_clone/view/Home.dart';
