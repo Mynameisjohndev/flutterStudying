@@ -71,7 +71,6 @@ class _ContactsState extends State<Contacts> {
                   MyUser user = listaItens![index];
                   return ListTile(
                     onTap: (){
-                      print({user.name, user.email});
                       Navigator.pushNamed(
                         context, 
                         "/chat",

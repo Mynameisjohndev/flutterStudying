@@ -1,14 +1,15 @@
-import 'dart:math';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:whatsapp_clone/components/ChatMessageList.dart';
 import 'package:whatsapp_clone/components/MessageTextField.dart';
+import 'package:whatsapp_clone/components/ModalSelectedPhoto.dart';
 import 'package:whatsapp_clone/model/Message.dart';
+import 'package:whatsapp_clone/model/SelectPhoto.dart';
 import 'package:whatsapp_clone/model/User.dart';
-
-import '../model/Chat.dart';
 
 class ChatMessage extends StatefulWidget {
   ChatMessage(this.user, {super.key});
@@ -21,22 +22,9 @@ class _ChatMessageState extends State<ChatMessage> {
   FirebaseFirestore db = FirebaseFirestore.instance;
   final TextEditingController controllerMensagem = TextEditingController();
   String? idUser;
-  late String idUserRecipient;
+  String? idUserRecipient;
   String? emailUser;
-  List<String> messages = [
-    "sdsdasadsdsdas dasd asdas dasd sad s as dsad asdsadas asdasd",
-    "sdsdasadsd",
-    "sdsdasadsd",
-    "sdsdasadsd",
-    "sdsdasadsd",
-    "sdsdasadsd",
-    "sdsdasadsd",
-    "sdsdasadsd",
-    "sdsdasadsd",
-    "sdsdasadsd",
-    "sdsdasadsd",
-    "sdsdasadsd",
-  ];
+  List<String> messages = [];
 
   _loadUserData() async {
     var logedUser = FirebaseAuth.instance.currentUser;
@@ -69,7 +57,9 @@ class _ChatMessageState extends State<ChatMessage> {
   }
 
   sendPhoto() {
-    // print("photo");
+    ModalSelectedPhotos alert = ModalSelectedPhotos();
+    alert.context = context;
+    showModalSelectedImage(alert: alert, idUser: idUser, idContact: idUserRecipient);
   }
 
   @override
@@ -79,13 +69,10 @@ class _ChatMessageState extends State<ChatMessage> {
   }
 
   Stream<Object?>? getMessages() {
-    // print("cuuuuuuuuuu");
-    // print(idUser);
-    // print(idUserRecipient);
     var response = db
         .collection("messages")
         .doc(idUser)
-        .collection(idUserRecipient)
+        .collection(idUserRecipient!)
         .snapshots();
     return response;
   }
@@ -94,10 +81,10 @@ class _ChatMessageState extends State<ChatMessage> {
   Widget build(BuildContext context) {
     var stream = StreamBuilder(
       stream: db
-        .collection("messages")
-        .doc(idUser)
-        .collection(idUserRecipient)
-        .snapshots(),
+          .collection("messages")
+          .doc(idUser)
+          .collection(idUserRecipient!)
+          .snapshots(),
       builder: (context, AsyncSnapshot snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -119,7 +106,8 @@ class _ChatMessageState extends State<ChatMessage> {
                 child: Text("Erro ao carregar os dados!"),
               );
             } else {
-              List<DocumentSnapshot> querySnapshotMessages = querySnapshot.docs.toList();
+              List<DocumentSnapshot> querySnapshotMessages =
+                  querySnapshot.docs.toList();
               return ChatMessageList(querySnapshotMessages, idUser!);
             }
         }
